@@ -151,6 +151,7 @@ class ChatChannel(Channel):
 
         # reply的发送步骤
         self._send_reply(context, reply)
+        # logger.debug("[WX] reply infos: context:{}, reply:{}".format(reply, context))
 
     def _generate_reply(self, context: Context, reply: Reply = Reply()) -> Reply:
         e_context = PluginManager().emit_event(
@@ -322,6 +323,9 @@ class ChatChannel(Channel):
                         else:
                             semaphore.release()
             time.sleep(0.1)
+
+        def cron_drink_wather_job(self):
+            self.send()
 
     # 取消session_id对应的所有任务，只能取消排队的消息和已提交线程池但未执行的任务
     def cancel_session(self, session_id):

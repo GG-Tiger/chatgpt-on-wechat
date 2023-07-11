@@ -3,11 +3,13 @@
 import os
 import signal
 import sys
+import time
 
 from channel import channel_factory
 from common.log import logger
 from config import conf, load_config
 from plugins import *
+from plugins.cronjob.cron_job import run_all_cronjob
 
 
 def sigterm_handler_wrap(_signo):
@@ -46,6 +48,11 @@ def run():
         if channel_name in ["wx", "wxy", "terminal", "wechatmp", "wechatmp_service", "wechatcom_app"]:
             PluginManager().load_plugins()
 
+        # cronjob
+        run_all_cronjob(channel)
+
+        # while True:
+        #     time.sleep(1)
         # startup channel
         channel.startup()
     except Exception as e:

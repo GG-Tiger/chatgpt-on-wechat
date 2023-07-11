@@ -116,7 +116,7 @@ class WechatChannel(ChatChannel):
             enableCmdQR=2,
             hotReload=hotReload,
             statusStorageDir=status_path,
-            qrCallback=qrCallback,
+            qrCallback=qrCallback
         )
         self.user_id = itchat.instance.storageClass.userName
         self.name = itchat.instance.storageClass.nickName
@@ -179,11 +179,15 @@ class WechatChannel(ChatChannel):
     def send(self, reply: Reply, context: Context):
         receiver = context["receiver"]
         if reply.type == ReplyType.TEXT:
-            itchat.send(reply.content, toUserName=receiver)
-            logger.info("[WX] sendMsg={}, receiver={}".format(reply, receiver))
+            ret = itchat.send(reply.content, toUserName=receiver)
+            # a = itchat.search_friends(nickName='G－bear')
+            # b = itchat.search_friends(nickName='多 十三')
+
+            # logger.info("[WX] sendMsg={}, receiver={}, ret={}, friends:{}, fri:{}".format(reply, receiver, ret, a, b))
+            logger.info("[WX] sendMsg={}, receiver={}, ret={}".format(reply, receiver, ret))
         elif reply.type == ReplyType.ERROR or reply.type == ReplyType.INFO:
-            itchat.send(reply.content, toUserName=receiver)
-            logger.info("[WX] sendMsg={}, receiver={}".format(reply, receiver))
+            ret = itchat.send(reply.content, toUserName=receiver)
+            logger.info("[WX] sendMsg={}, receiver={}, ret={}".format(reply, receiver, ret))
         elif reply.type == ReplyType.VOICE:
             itchat.send_file(reply.content, toUserName=receiver)
             logger.info("[WX] sendFile={}, receiver={}".format(reply.content, receiver))
@@ -201,3 +205,4 @@ class WechatChannel(ChatChannel):
             image_storage.seek(0)
             itchat.send_image(image_storage, toUserName=receiver)
             logger.info("[WX] sendImage, receiver={}".format(receiver))
+

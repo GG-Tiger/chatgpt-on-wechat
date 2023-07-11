@@ -6,6 +6,7 @@ from channel.chat_channel import ChatChannel, check_prefix
 from channel.chat_message import ChatMessage
 from common.log import logger
 from config import conf
+from lib.itchat import core
 
 
 class TerminalMessage(ChatMessage):
@@ -66,6 +67,7 @@ class TerminalChannel(ChatChannel):
         print("\nPlease input your question:\nUser:", end="")
         sys.stdout.flush()
         msg_id = 0
+
         while True:
             try:
                 prompt = self.get_input()
