@@ -1,0 +1,23 @@
+    2  2023-07-12 13:18:57 gbear cd chatgpt-on-wechat/
+    6  2023-07-12 13:19:12 gbear python3 -m venv python3env
+    7  2023-07-12 13:19:20 gbear . python3env/bin/activate
+    8  2023-07-12 13:19:29 gbear pip install pyqrcode
+    9  2023-07-12 13:19:51 gbear pip install --upgrade pip
+   17  2023-07-12 13:22:18 gbear pip install -r requirements.txt     这一步执行出错，后面手动安装了requirements
+   19  2023-07-12 13:22:33 gbear cat requirements.txt 
+   20  2023-07-12 13:22:43 gbear pip list
+   21  2023-07-12 13:22:53 gbear pip search openai
+   22  2023-07-12 13:22:59 gbear cd 
+   23  2023-07-12 13:23:03 gbear mkdir .pip                          这一步是配置pip源，原来的源访问太慢了，现在配的是ali源
+   24  2023-07-12 13:23:05 gbear cd .pip/
+   25  2023-07-12 13:23:12 gbear vim pip.conf
+   26  2023-07-12 13:23:19 gbear cd
+   27  2023-07-12 13:23:20 gbear cd chatgpt-on-wechat/
+   31  2023-07-12 13:24:43 gbear pip install --upgrade openai
+   36  2023-07-12 13:25:42 gbear pip install Pillow
+   37  2023-07-12 13:26:00 gbear pip install HTMLParser
+   39  2023-07-12 13:26:29 gbear pip install qrcode
+   41  2023-07-12 13:26:48 gbear pip install pre-commit
+   45  2023-07-12 13:28:11 gbear pip install pypng
+			 	 pip install apscheduler   
+50  2023-07-12 13:28:33 gbear python app.py 
