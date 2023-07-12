@@ -106,6 +106,7 @@ class WechatChannel(ChatChannel):
     def __init__(self):
         super().__init__()
         self.receivedMsgs = ExpiredDict(60 * 60 * 24)
+        self.online = False
 
     def startup(self):
         itchat.instance.receivingRetryCount = 600  # 修改断线超时时间
@@ -122,6 +123,7 @@ class WechatChannel(ChatChannel):
         self.name = itchat.instance.storageClass.nickName
         logger.info("Wechat login success, user_id: {}, nickname: {}".format(self.user_id, self.name))
         # start message listener
+        self.online = True
         itchat.run()
 
     # handle_* 系列函数处理收到的消息后构造Context，然后传入produce函数中处理Context和发送回复

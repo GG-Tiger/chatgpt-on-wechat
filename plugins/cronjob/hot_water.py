@@ -5,26 +5,23 @@ from PIL import Image
 from apscheduler.triggers.base import BaseTrigger
 from apscheduler.triggers.cron import CronTrigger
 
-
 from bridge.context import Context, ContextType
 from bridge.reply import Reply, ReplyType
-from channel import channel
 from channel.wechat.wechat_channel import WechatChannel
 from common.log import logger
 from lib import itchat
-from plugins.cronjob.cron_job import CronJob, CronJobTriggerEnum
+from plugins.cronjob.cron_job import CronJob
 
-
-hour_list = [11, 12, 14, 15, 16, 17, 18, 20]
+hour_list = [11, 12, 14, 15, 16, 17, 18, 22]
 hour_img_map = {
-    11: "./resources/cup1.png",
-    12: "./resources/cup2.png",
-    14: "./resources/cup3.png",
-    15: "./resources/cup4.png",
-    16: "./resources/cup5.png",
-    17: "./resources/cup6.png",
-    18: "./resources/cup7.png",
-    20: "./resources/cup8.png",
+    11: "./resources/drink_water/cup1.png",
+    12: "./resources/drink_water/cup2.png",
+    14: "./resources/drink_water/cup3.png",
+    15: "./resources/drink_water/cup4.png",
+    16: "./resources/drink_water/cup5.png",
+    17: "./resources/drink_water/cup6.png",
+    18: "./resources/drink_water/cup7.png",
+    20: "./resources/drink_water/cup8.png",
 }
 
 
@@ -58,23 +55,11 @@ class DrinkHotWater(CronJob):
         try:
             # user = itchat.search_friends(nickName='多 十三')
             user = itchat.search_friends(nickName='G－bear')
+            user_lb = itchat.search_friends(nickName='多 十三')
             logger.debug("itchat.search_friends,res:{}".format(user))
         except:
             logger.debug("fail to search_friends, maybe not login")
             return
-
-        # TEXT
-        # reply = Reply(content="start...", type=ReplyType.TEXT)
-        # kargs = dict()
-        # kargs['isgroup'] = False
-        # kargs['msg'] = False
-        # kargs['origin_ctype'] = ContextType.TEXT
-        # kargs['session_id'] = False
-        # kargs['receiver'] = user[0]['UserName']
-        #
-        # context = Context(type=ContextType.TEXT, content="start...", kwargs=kargs)
-        # ret = chan.send(reply, context)
-        # logger.debug("_send_drink_water, reply:{}, context:{}, itchat res:{}".format(reply, context, ret))
 
         # IMAGE
         # Open an image file
@@ -95,3 +80,6 @@ class DrinkHotWater(CronJob):
                 context = Context(type=ContextType.IMAGE, content=out, kwargs=kargs)
                 ret = chan.send(reply, context)
                 logger.debug("_send_drink_water, reply:{}, context:{}, itchat res:{}".format(reply, context, ret))
+
+                context.kwargs['receiver'] = user_lb[0]['UserName']
+                ret = chan.send(reply, context)

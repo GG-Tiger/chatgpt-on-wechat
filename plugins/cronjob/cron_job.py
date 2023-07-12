@@ -4,6 +4,7 @@ import inspect
 import pkgutil
 import sys
 import threading
+import time
 from enum import Enum
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -30,6 +31,13 @@ class CronJob(object):
         if type(channel) is not type(WechatChannel()):
             raise TypeError
         self.channel = channel
+
+    def run_job(self):
+        if not WechatChannel().online:
+            logger.debug("pass cronjob run, for WechatChannel is not online")
+            time.sleep(1)
+        else:
+            self.run()
 
     def run(self):
         raise NotImplementedError
@@ -65,7 +73,7 @@ def run_subclasses(channel: ChatChannel):
     for subclass in get_subclasses():
         instance = subclass(channel)
         logger.debug("instance:{}, add job. trigger:{}".format(instance.__class__, instance.get_job_scheduler()))
-        scheduler.add_job(instance.run, instance.get_job_scheduler())
+        scheduler.add_job(instance.run_job, instance.get_job_scheduler())
     scheduler.start()
 
 
