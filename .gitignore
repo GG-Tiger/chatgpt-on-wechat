@@ -24,4 +24,5 @@ plugins/**/
 !plugins/banwords/**/
 !plugins/hello
 !plugins/role
+!plugins/cronjob
 !plugins/keyword

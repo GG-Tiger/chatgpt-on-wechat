@@ -19,7 +19,6 @@ except Exception as e:
     pass
 
 
-# 抽象类, 它包含了与消息通道无关的通用处理逻辑
 class ChatChannel(Channel):
     name = None  # 登录的用户名
     user_id = None  # 登录的用户id
@@ -142,10 +141,11 @@ class ChatChannel(Channel):
         if context is None or not context.content:
             return
         logger.debug("[WX] ready to handle context: {}".format(context))
+        
         # reply的构建步骤
         reply = self._generate_reply(context)
-
         logger.debug("[WX] ready to decorate reply: {}".format(reply))
+        
         # reply的包装步骤
         reply = self._decorate_reply(context, reply)
 
@@ -166,6 +166,7 @@ class ChatChannel(Channel):
             if e_context.is_break():
                 context["generate_breaked_by"] = e_context["breaked_by"]
             if context.type == ContextType.TEXT or context.type == ContextType.IMAGE_CREATE:  # 文字和图片消息
+                logger.debug("content:{}, type:{}",  context.content, context.type)
                 reply = super().build_reply_content(context.content, context)
             elif context.type == ContextType.VOICE:  # 语音消息
                 cmsg = context["msg"]
@@ -323,9 +324,6 @@ class ChatChannel(Channel):
                         else:
                             semaphore.release()
             time.sleep(0.1)
-
-        def cron_drink_wather_job(self):
-            self.send()
 
     # 取消session_id对应的所有任务，只能取消排队的消息和已提交线程池但未执行的任务
     def cancel_session(self, session_id):

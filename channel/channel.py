@@ -1,9 +1,9 @@
 """
 Message sending channel abstract class
 """
-
+import common.weather
 from bridge.bridge import Bridge
-from bridge.context import Context
+from bridge.context import Context, ContextType
 from bridge.reply import *
 
 
@@ -41,3 +41,29 @@ class Channel(object):
 
     def build_text_to_voice(self, text) -> Reply:
         return Bridge().fetch_text_to_voice(text)
+
+    def build_current_weather(self, user_id: str) -> (Reply, Context):
+        yes, wea = common.weather.get_latest_weather()
+        rep = Reply()
+        ctx = Context()
+        kargs = dict()
+        kargs['isgroup'] = False
+        kargs['msg'] = False
+        kargs['origin_ctype'] = ContextType.TEXT
+        kargs['session_id'] = False
+        kargs['receiver'] = user_id
+
+        if yes:
+            rep.type = ReplyType.TEXT
+            rep.content = wea
+
+            ctx.type = ContextType.TEXT
+            ctx.content = wea
+        else:
+            rep.type = ReplyType.TEXT
+            rep.content = "build reply error"
+
+            ctx.type = ContextType.TEXT
+            ctx.content = "build reply error"
+        ctx.kwargs = kargs
+        return rep, ctx

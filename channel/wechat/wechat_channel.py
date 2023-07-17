@@ -150,10 +150,17 @@ class WechatChannel(ChatChannel):
         elif cmsg.ctype == ContextType.PATPAT:
             logger.debug("[WX]receive patpat msg: {}".format(cmsg.content))
         elif cmsg.ctype == ContextType.TEXT:
-            logger.debug("[WX]receive text msg: {}, cmsg={}".format(json.dumps(cmsg._rawmsg, ensure_ascii=False), cmsg))
+            logger.debug("[WX]receive text msg: {}, cmsg={}, content:{}, cfg:{}".format(json.dumps(cmsg._rawmsg, ensure_ascii=False),
+                                                                                        cmsg, cmsg.content, conf().get("health_check_key", "天气")))
+            if cmsg.content in conf().get("health_check_key", "天气"):
+                reply, ctx = self.build_current_weather(cmsg.from_user_id)
+                logger.debug("[WX]build_current_weather: {}, {}".format(reply, ctx))
+                self.send(reply, ctx)
+                return
         else:
             logger.debug("[WX]receive msg: {}, cmsg={}".format(cmsg.content, cmsg))
         context = self._compose_context(cmsg.ctype, cmsg.content, isgroup=False, msg=cmsg)
+        logger.debug("context:{}".format(context))
         if context:
             self.produce(context)
 
