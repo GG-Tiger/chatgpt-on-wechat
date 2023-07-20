@@ -21,7 +21,7 @@ hour_img_map = {
     16: "./resources/drink_water/cup5.png",
     17: "./resources/drink_water/cup6.png",
     18: "./resources/drink_water/cup7.png",
-    20: "./resources/drink_water/cup8.png",
+    22: "./resources/drink_water/cup8.png",
 }
 
 
@@ -47,7 +47,7 @@ class DrinkHotWater(CronJob):
             logger.debug("pass run. for current hour")
 
     def get_job_scheduler(self) -> BaseTrigger:
-        trigger = CronTrigger(hour='11-20', minute='0', second='0', timezone='Asia/Shanghai')
+        trigger = CronTrigger(hour='11-22', minute='0', second='0', timezone='Asia/Shanghai')
         return trigger
 
     def _send_drink_water(self):
