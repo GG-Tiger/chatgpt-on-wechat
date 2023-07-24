@@ -19,13 +19,6 @@ from channel.wechat.wechat_channel import WechatChannel
 from common.log import logger
 
 
-class CronJobTriggerEnum(Enum):
-    # date, interval or cron
-    ConJobTriggerDate = 'date'
-    ConJobTriggerInterVal = 'interval'
-    ConJobTriggerCron = 'cron'
-
-
 class CronJob(object):
     def __init__(self, channel: ChatChannel):
         if type(channel) is not type(WechatChannel()):
