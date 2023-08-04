@@ -2,21 +2,17 @@
 import importlib
 import inspect
 import pkgutil
-import sys
-import threading
 import time
-from enum import Enum
 
 from apscheduler.schedulers.background import BackgroundScheduler
-from typing import Tuple
-
 from apscheduler.triggers.base import BaseTrigger
-from apscheduler.triggers.interval import IntervalTrigger
 
 import plugins
 from channel.chat_channel import ChatChannel
 from channel.wechat.wechat_channel import WechatChannel
 from common.log import logger
+
+Chat_Group_Name = "多多扭蛋家庭群"
 
 
 class CronJob(object):

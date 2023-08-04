@@ -10,7 +10,7 @@ from bridge.reply import Reply, ReplyType
 from channel.wechat.wechat_channel import WechatChannel
 from common.log import logger
 from lib import itchat
-from plugins.cronjob.cron_job import CronJob
+from plugins.cronjob.cron_job import CronJob, Chat_Group_Name
 
 hour_list = [11, 12, 14, 15, 16, 17, 18, 22]
 hour_img_map = {
@@ -52,11 +52,14 @@ class DrinkHotWater(CronJob):
 
     def _send_drink_water(self):
         chan = WechatChannel(self.channel)
+        kargs = dict()
         try:
             # user = itchat.search_friends(nickName='多 十三')
-            user = itchat.search_friends(nickName='G－bear')
-            user_lb = itchat.search_friends(nickName='多 十三')
-            logger.debug("itchat.search_friends,res:{}".format(user))
+            # user = itchat.search_friends(nickName='G－bear')
+            # user_lb = itchat.search_friends(nickName='多 十三')
+            user = itchat.search_chatrooms(name=Chat_Group_Name)
+            logger.debug("itchat.search_chatrooms,res:{}".format(user))
+            kargs['receiver'] = user[0]['UserName']
         except:
             logger.debug("fail to search_friends, maybe not login")
             return
@@ -70,16 +73,11 @@ class DrinkHotWater(CronJob):
             with io.BytesIO() as output:
                 img.save(out, format="PNG")
                 reply = Reply(content=out, type=ReplyType.IMAGE)
-                kargs = dict()
-                kargs['isgroup'] = False
+                kargs['isgroup'] = True
                 kargs['msg'] = False
                 kargs['origin_ctype'] = ContextType.IMAGE
                 kargs['session_id'] = False
-                kargs['receiver'] = user[0]['UserName']
 
                 context = Context(type=ContextType.IMAGE, content=out, kwargs=kargs)
                 ret = chan.send(reply, context)
                 logger.debug("_send_drink_water, reply:{}, context:{}, itchat res:{}".format(reply, context, ret))
-
-                context.kwargs['receiver'] = user_lb[0]['UserName']
-                ret = chan.send(reply, context)

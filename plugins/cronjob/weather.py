@@ -29,7 +29,6 @@ class WeatherBroadcast(CronJob):
         # logger.debug("itchat.search_friends,res:{}".format(user))
         yes, today_weather = get_latest_weather()
         if yes:
-            itchat_send.send_text(chan, '多 十三', today_weather)
-            itchat_send.send_text(chan, 'G－bear', today_weather)
+            itchat_send.send_text(chan, "多多扭蛋家庭群", today_weather, True)
         else:
             itchat_send.send_text(chan, '多 十三', "播报天气失败")

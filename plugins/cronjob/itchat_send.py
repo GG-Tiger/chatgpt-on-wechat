@@ -5,37 +5,22 @@ from common.log import logger
 from lib import itchat
 
 
-def send_text(channel: WechatChannel, wechat_nick_name: str, msg: str) -> (bool, str):
+def send_text(channel: WechatChannel, name: str, msg: str, isGroup=False) -> (bool, str):
     chan = WechatChannel(channel)
-    # try:
-    #     # user = itchat.search_friends(nickName='多 十三')
-    #     user = itchat.search_friends(nickName=wechat_nick_name)
-    #     logger.debug("itchat.search_friends,res:{}".format(user))
-    #     reply = Reply(content=msg, type=ReplyType.TEXT)
-    #     kargs = dict()
-    #     kargs['isgroup'] = False
-    #     kargs['msg'] = False
-    #     kargs['origin_ctype'] = ContextType.TEXT
-    #     kargs['session_id'] = False
-    #     kargs['receiver'] = user[0]['UserName']
-    #
-    #     context = Context(type=ContextType.TEXT, content=msg, kwargs=kargs)
-    #     ret = chan.send(reply, context)
-    #     logger.debug("send_text, reply:{}, context:{}, itchat res:{}".format(reply, context, ret))
-    #     return True, ""
-    # except:
-    #     logger.debug("fail to search_friends, maybe not login")
-    #     return False, "fail to search_friends, maybe not login"
-    # user = itchat.search_friends(nickName='多 十三')
-    user = itchat.search_friends(nickName=wechat_nick_name)
-    logger.debug("itchat.search_friends,res:{}".format(user))
-    reply = Reply(content=msg, type=ReplyType.TEXT)
     kargs = dict()
-    kargs['isgroup'] = False
+    if isGroup:
+        user = itchat.search_chatrooms(name=name)
+        logger.debug("itchat.search_chatrooms,res:{}".format(user))
+        kargs['receiver'] = user[0]['UserName']
+    else:
+        user = itchat.search_friends(nickName=name)
+        kargs['receiver'] = user[0]['UserName']
+        logger.debug("itchat.search_friends,res:{}".format(user))
+    reply = Reply(content=msg, type=ReplyType.TEXT)
+    kargs['isgroup'] = isGroup
     kargs['msg'] = False
     kargs['origin_ctype'] = ContextType.TEXT
     kargs['session_id'] = False
-    kargs['receiver'] = user[0]['UserName']
 
     context = Context(type=ContextType.TEXT, content=msg, kwargs=kargs)
     ret = chan.send(reply, context)

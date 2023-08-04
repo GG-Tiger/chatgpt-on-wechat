@@ -14,8 +14,8 @@ class HealthCheck(CronJob):
     def run(self):
         logger.debug("start to run HealthCheck...")
         chan = WechatChannel(self.channel)
-        itchat_send.send_text(chan, 'G-tiger', "ping")
+        itchat_send.send_text(chan, '多 十三', "ping")
 
     def get_job_scheduler(self) -> BaseTrigger:
-        trigger = CronTrigger.from_crontab('0 */2 * * *')
+        trigger = CronTrigger(hour='*/5', timezone='Asia/Shanghai')
         return trigger
